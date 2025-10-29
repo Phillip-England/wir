@@ -1,0 +1,7 @@
+ul<id='my-list' class='bg-black ${someClass: string}'> {
+  li
+  'Name: ${listName: string}'
+  @for(user: User) {
+    li { 'name: ${user.name: string}' }
+  }
+}
