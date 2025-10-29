@@ -1,0 +1,49 @@
+package wirtokenizer
+
+type TokenType string
+
+const (
+	TokenTypeRawText                 = "RAW_TEXT"
+	TokenTypeString                  = "STRING"
+	TokenTypeTagInfo                 = "TAG_INFO"
+	TokenTypeAtDirective             = "AT_DIRECTIVE"
+	TokenTypeCurlyBraceOpen          = "CURLY_BRACE_OPEN"
+	TokenTypeCurlyBraceClose         = "CURLY_BRACE_CLOSE"
+	TokenTypeDollarSignInterpolation = "DOLLAR_SIGN_INTERPOLATION"
+
+	TokenTypeHTMLTagInfoStart    = "HTML_TAG_INFO_START"
+	TokenTypeHTMLTagInfoEnd      = "HTML_TAG_INFO_END"
+	TokenTypeHTMLTagName         = "HTML_TAG_NAME"
+	TokenTypeHTMLCurlyBraceOpen  = "HTML_CURLY_BRACE_OPEN"
+	TokenTypeHTMLCurlyBraceClose = "HTML_CURLY_BRACE_CLOSE"
+
+	TokenTypeHTMLAttrKey          = "HTML_ATTR_KEY"
+	TokenTypeHTMLAttrEqualSign    = "HTML_ATTR_EQUAL_SIGN"
+	TokenTypeHTMLAttrValue        = "HTML_ATTR_VALUE"
+	TokenTypeHTMLAttrValuePartial = "HTML_ATTR_VALUE_PARTIAL"
+
+	TokenTypeStringStart   = "STRING_START"
+	TokenTypeStringEnd     = "STRING_END"
+	TokenTypeStringContent = "STRING_CONTENT"
+
+	TokenTypeDollarSignInterpolationOpen      = "DOLLAR_SIGN_INTERPOLATION_OPEN"
+	TokenTypeDollarSignInterpolationClose     = "DOLLAR_SIGN_INTERPOLATION_CLOSE"
+	TokenTypeDollarSignInterpolationValue     = "DOLLAR_SIGN_INTERPOLATION_VALUE"
+	TokenTypeDollarSignInterpolationSemiColon = "DOLLAR_SIGN_INTERPOLATION_SEMICOLON"
+	TokenTypeDollarSignInterpolationType      = "DOLLAR_SIGN_INTERPOLATION_TYPE"
+
+	TokenTypeAtDirectiveStart            = "AT_DIRECTIVE_START"
+	TokenTypeAtDirectiveName             = "AT_DIRECTIVE_NAME"
+	TokenTypeAtDirectiveParenthesisOpen  = "AT_DIRECTIVE_PARENTHESIS_OPEN"
+	TokenTypeAtDirectiveParenthesisClose = "AT_DIRECTIVE_PARENTHESIS_CLOSE"
+	TokenTypeAtDirectiveParamValue       = "AT_DIRECTIVE_PARAM_VALUE"
+	TokenTypeAtDirectiveSemiColon        = "AT_DIRECTIVE_SEMICOLON"
+	TokenTypeAtDirectiveParamType        = "AT_DIRECTIVE_PARAM_TYPE"
+
+	TokenTypeEndOfFile = "END_OF_FILE"
+)
+
+type Token struct {
+	t    TokenType
+	text string
+}
