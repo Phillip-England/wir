@@ -1,9 +1,7 @@
 package runelexer
 
 import (
-	"fmt"
 	"math"
-	"runtime"
 )
 
 type RuneLexer[T any] struct {
@@ -287,10 +285,6 @@ func (l *RuneLexer[T]) PrevUntilNotAny(chars ...string) string {
 	return string(l.runes[l.position+1 : start+1])
 }
 
-func (l *RuneLexer[T]) Here() location {
-	return here()
-}
-
 func (l *RuneLexer[T]) InQuote() bool {
 	return isInQuote(l.runes, l.position)
 }
@@ -390,20 +384,6 @@ func (l *RuneLexer[T]) Pull(n int) string {
 	}
 
 	return string(l.runes[start:end])
-}
-
-type location struct {
-	File string
-	Line int
-}
-
-func (l location) str() string {
-	return fmt.Sprintf("Line: %d: File: %s", l.Line, l.File)
-}
-
-func here() location {
-	_, file, line, _ := runtime.Caller(1)
-	return location{File: file, Line: line}
 }
 
 func isInQuote(r []rune, pos int) bool {

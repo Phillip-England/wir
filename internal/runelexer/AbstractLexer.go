@@ -201,10 +201,6 @@ func (l *AbstractLexer[T]) MarkedPos() int {
 	return l.markedPosition
 }
 
-func (l *AbstractLexer[T]) Here() location {
-	return here()
-}
-
 func (l *AbstractLexer[T]) Store() {
 	if l.position >= 0 && l.position < len(l.items) {
 		l.store = append(l.store, l.items[l.position])

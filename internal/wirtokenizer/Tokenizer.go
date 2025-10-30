@@ -1,13 +1,28 @@
 package wirtokenizer
 
 import (
+	"os"
 	"strings"
 
 	"github.com/phillip-england/wir/internal/runelexer"
+	"github.com/phillip-england/wir/internal/wherr"
 )
 
 type Tokenizer struct {
-	lexer *runelexer.RuneLexer[Token]
+	Lexer *runelexer.RuneLexer[Token]
+}
+
+func TokenizerNewFromFile(path string) (*Tokenizer, error) {
+	fBytes, err := os.ReadFile(path)
+	if err != nil {
+		return &Tokenizer{}, wherr.Consume(wherr.Here(), err, "")
+	}
+	fStr := string(fBytes)
+	tk, err := TokenizerNewFromString(fStr)
+	if err != nil {
+		return &Tokenizer{}, wherr.Consume(wherr.Here(), err, "")
+	}
+	return tk, nil
 }
 
 func TokenizerNewFromString(s string) (*Tokenizer, error) {
@@ -18,16 +33,16 @@ func TokenizerNewFromString(s string) (*Tokenizer, error) {
 		return &Tokenizer{}, err
 	}
 	return &Tokenizer{
-		lexer: l,
+		Lexer: l,
 	}, nil
 }
 
 func (t *Tokenizer) Str() string {
 	s := ""
-	if t.lexer.TokenLen() == 0 {
+	if t.Lexer.TokenLen() == 0 {
 		return ""
 	}
-	t.lexer.TokenIter(func(token Token, index int) bool {
+	t.Lexer.TokenIter(func(token Token, index int) bool {
 		s += string(token.t) + ":" + token.text + "\n"
 		return true
 	})

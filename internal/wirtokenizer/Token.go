@@ -1,6 +1,7 @@
 package wirtokenizer
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/phillip-england/wir/internal/runelexer"
@@ -54,6 +55,10 @@ const (
 type Token struct {
 	t    TokenType
 	text string
+}
+
+func (t Token) Str() string {
+	return fmt.Sprintf("%s:%s", t.t, t.text)
 }
 
 func TokenManyFromStr(s string) ([]Token, error) {

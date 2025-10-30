@@ -8,6 +8,7 @@ import (
 
 	"github.com/phillip-england/wir/internal/soak"
 	"github.com/phillip-england/wir/internal/wherr"
+	"github.com/phillip-england/wir/internal/wirparser"
 	"github.com/phillip-england/wir/internal/wirtokenizer"
 )
 
@@ -17,7 +18,15 @@ func fail(t *testing.T, err error) {
 }
 
 func TestWirParser(t *testing.T) {
-	fmt.Println("testing")
+	cwd, _ := os.Getwd()
+	tk, err := wirtokenizer.TokenizerNewFromFile(path.Join(cwd, "examples", "raw", "h1.wir"))
+	if err != nil {
+		fail(t, wherr.Consume(wherr.Here(), err, ""))
+	}
+	_, err = wirparser.ParserNew(tk.Lexer.Tokens())
+	if err != nil {
+		fail(t, wherr.Consume(wherr.Here(), err, ""))
+	}
 }
 
 func TestLoadTokenFile(t *testing.T) {
