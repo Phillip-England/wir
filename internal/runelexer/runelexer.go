@@ -8,7 +8,6 @@ import (
 
 type RuneLexer[T any] struct {
 	position    int
-	tokPosition int
 	endPosition int
 	runes       []rune
 	markedPos   int
@@ -21,7 +20,6 @@ func NewRuneLexer[T any](s string) *RuneLexer[T] {
 	runes := []rune(s)
 	return &RuneLexer[T]{
 		position:    0,
-		tokPosition: 0,
 		endPosition: len(runes) - 1,
 		runes:       runes,
 		markedPos:   0,

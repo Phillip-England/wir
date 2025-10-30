@@ -16,6 +16,10 @@ func fail(t *testing.T, err error) {
 	t.Fail()
 }
 
+func TestWirParser(t *testing.T) {
+	fmt.Println("testing")
+}
+
 func TestLoadTokenFile(t *testing.T) {
 	cwd, _ := os.Getwd()
 	_, err := wirtokenizer.TokenFileLoad(path.Join(cwd, "examples", "toks", "user_list.tok"))
@@ -38,7 +42,7 @@ func TestExamplesTokenized(t *testing.T) {
 		if err != nil {
 			fail(t, wherr.Consume(wherr.Here(), err, ""))
 		}
-		targetTokFile, err := wirtokenizer.TokenFileNewFromTokenizer(tk)
+		targetTokFile, err := wirtokenizer.TokenFileNewFromTokenizer("", tk)
 		if err != nil {
 			fail(t, wherr.Consume(wherr.Here(), err, ""))
 		}

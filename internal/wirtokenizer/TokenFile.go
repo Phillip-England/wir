@@ -13,7 +13,7 @@ type TokenFile struct {
 	TokenStr string
 }
 
-func TokenFileNewFromTokenizer(tk *Tokenizer) (TokenFile, error) {
+func TokenFileNewFromTokenizer(path string, tk *Tokenizer) (TokenFile, error) {
 	s := tk.Str()
 	toks, err := TokenManyFromStr(s)
 	if err != nil {
@@ -24,7 +24,7 @@ func TokenFileNewFromTokenizer(tk *Tokenizer) (TokenFile, error) {
 		tokenStr += tok.text
 	}
 	return TokenFile{
-		Path: "",
+		Path: path,
 		Text: s,
 		Tokens: toks,
 		TokenStr: tokenStr,
