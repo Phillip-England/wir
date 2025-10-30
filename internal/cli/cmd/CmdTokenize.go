@@ -83,11 +83,11 @@ func tokenizeFile(cmd CmdTokenize) error {
 		return wherr.Consume(wherr.Here(), err, "")
 	}
 	fStr := string(fBytes)
-	tk, err := wirtokenizer.NewFromString(fStr)
+	tk, err := wirtokenizer.TokenizerNewFromString(fStr)
 	if err != nil {
 		return wherr.Consume(wherr.Here(), err, "")
 	}
-	err = os.WriteFile(cmd.outPathAbs, []byte(tk.TokStr()), 0775)
+	err = os.WriteFile(cmd.outPathAbs, []byte(tk.Str()), 0775)
 	if err != nil {
 		return wherr.Consume(wherr.Here(), err, "")
 	}
@@ -108,7 +108,7 @@ func tokenizeDir(cmd CmdTokenize) error {
 	var potErr error
 	vfs.IterAssets(func(a *soak.VirtualAsset) bool {
 		outDirPath := path.Join(cmd.outPathAbs, a.FileNameNoExt+".tok")
-		tk, err := wirtokenizer.NewFromString(a.Text)
+		tk, err := wirtokenizer.TokenizerNewFromString(a.Text)
 		if err != nil {
 			potErr = wherr.Consume(wherr.Here(), err, "")
 		}
@@ -116,7 +116,7 @@ func tokenizeDir(cmd CmdTokenize) error {
 		if err != nil {
 			potErr =  wherr.Consume(wherr.Here(), err, "")
 		}
-		err = os.WriteFile(outDirPath, []byte(tk.TokStr()), 0644)
+		err = os.WriteFile(outDirPath, []byte(tk.Str()), 0644)
 		if err != nil {
 			fmt.Println(err.Error())
 			potErr =  wherr.Consume(wherr.Here(), err, "")

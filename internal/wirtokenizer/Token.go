@@ -1,5 +1,12 @@
 package wirtokenizer
 
+import (
+	"strings"
+
+	"github.com/phillip-england/wir/internal/runelexer"
+	"github.com/phillip-england/wir/internal/wherr"
+)
+
 type TokenType string
 
 const (
@@ -40,6 +47,7 @@ const (
 	TokenTypeAtDirectiveSemiColon        = "AT_DIRECTIVE_SEMICOLON"
 	TokenTypeAtDirectiveParamType        = "AT_DIRECTIVE_PARAM_TYPE"
 
+
 	TokenTypeEndOfFile = "END_OF_FILE"
 )
 
@@ -47,3 +55,34 @@ type Token struct {
 	t    TokenType
 	text string
 }
+
+func TokenManyFromStr(s string) ([]Token, error) {
+	var toks []Token
+	lines := strings.Split(s, "\n")
+	for i, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		l := runelexer.NewRuneLexer[Token](line)
+		foundColon := false
+		l.Iter(func(ch string, pos int) bool {
+			if ch == ":" {
+				foundColon = true
+				return false
+			}
+			return true
+		})
+		if !foundColon {
+			return toks, wherr.Err(wherr.Here(), "token string is malformed on line %d: %s", i+1, line)
+		}
+		t := l.PullFromStart()
+		l.Next()
+		text := l.PullFromEnd()
+		tok := Token{
+			t: TokenType(t),
+			text: text,
+		}
+		toks = append(toks, tok)
+	}
+	return toks, nil
+} 

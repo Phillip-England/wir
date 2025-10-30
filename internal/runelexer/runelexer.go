@@ -43,6 +43,9 @@ func (l *RuneLexer[T]) Runes() []rune {
 }
 
 func (l *RuneLexer[T]) Char() string {
+	if len(l.runes) == 0 {
+		return ""
+	}
 	return string(l.runes[l.position])
 }
 

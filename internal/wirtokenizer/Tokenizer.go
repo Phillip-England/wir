@@ -10,7 +10,7 @@ type Tokenizer struct {
 	lexer *runelexer.RuneLexer[Token]
 }
 
-func NewFromString(s string) (*Tokenizer, error) {
+func TokenizerNewFromString(s string) (*Tokenizer, error) {
 	s = strings.TrimSpace(s)
 	l := runelexer.NewRuneLexer[Token](s)
 	err := tokenizeWir(l)
@@ -22,7 +22,7 @@ func NewFromString(s string) (*Tokenizer, error) {
 	}, nil
 }
 
-func (t *Tokenizer) TokStr() string {
+func (t *Tokenizer) Str() string {
 	s := ""
 	if t.lexer.TokenLen() == 0 {
 		return ""
@@ -46,7 +46,13 @@ func tokenizeWir(l *runelexer.RuneLexer[Token]) error {
 		return err
 	}
 	err = phase2(l)
+	if err != nil {
+		return err
+	}
 	err = phase3(l)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -157,10 +163,12 @@ func phase2(l *runelexer.RuneLexer[Token]) error {
 					case ">":
 						{
 							attrKey := strings.TrimSpace(l2.StoreFlush())
-							toks = append(toks, Token{
-								t:    TokenTypeHTMLAttrKey,
-								text: attrKey,
-							})
+							if attrKey != "" {
+								toks = append(toks, Token{
+									t:    TokenTypeHTMLAttrKey,
+									text: attrKey,
+								})
+							}
 							toks = append(toks, Token{
 								t:    TokenTypeHTMLTagInfoEnd,
 								text: ">",
@@ -273,10 +281,13 @@ func phase2(l *runelexer.RuneLexer[Token]) error {
 								return true
 							}
 							if l2.AtEnd() && ch == "'" {
-								toks = append(toks, Token{
-									t:    TokenTypeStringContent,
-									text: l2.StoreFlush(),
-								})
+								flush := l2.StoreFlush()
+								if flush != "" {
+									toks = append(toks, Token{
+										t:    TokenTypeStringContent,
+										text: flush,
+									})
+								}
 								toks = append(toks, Token{
 									t:    TokenTypeStringEnd,
 									text: "'",
@@ -382,7 +393,8 @@ func phase2(l *runelexer.RuneLexer[Token]) error {
 
 func phase1(l *runelexer.RuneLexer[Token]) error {
 	collectStore := func(l *runelexer.RuneLexer[Token]) {
-		s := strings.TrimSpace(l.StoreFlush())
+		flush := l.StoreFlush()
+		s := strings.TrimSpace(flush)
 		if s != "" {
 			l.TokenAppend(Token{
 				t:    TokenTypeRawText,
